@@ -1,0 +1,42 @@
+# Composer
+/vendor/
+composer.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Laravel specific
+/.env
+/.env.backup
+/.env.production
+/node_modules/
+/public/hot
+/public/storage
+/storage/*.key
+
+# Logs
+*.log
+/storage/logs/*
+
+# Cache
+/bootstrap/cache/*
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+# Testing
+/coverage/
+/.phpunit.result.cache
+/phpunit.xml
+
+# Temporary files
+*.tmp
+*.temp
+/tmp/

@@ -1,0 +1,21 @@
+{
+    "name": "lxl921118/my-package",
+    "description": "我的package",
+    "type": "library",
+    "require": {
+        "php": "^8.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Lxl921118\\MyPackage\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Lxl921118",
+            "email": "asd22251299@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
