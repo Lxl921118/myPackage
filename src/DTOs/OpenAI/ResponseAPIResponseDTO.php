@@ -153,9 +153,9 @@ final class ResponseAPIResponseDTO extends ImmutableBase
 
     /**
      * 模型文字回應的配置選項
-     * @var object|null
+     * @var array|null
      */
-    public readonly ?object $text;
+    public readonly ?array $text;
 
     /**
      * 模型應如何選擇工具
@@ -189,9 +189,9 @@ final class ResponseAPIResponseDTO extends ImmutableBase
 
     /**
      * 令牌使用詳細資訊
-     * @var object|null
+     * @var array|null
      */
-    public readonly ?object $usage;
+    public readonly ?array $usage;
 
     /**
      * 已棄用：使用者識別符，建議使用 safety_identifier 和 prompt_cache_key
