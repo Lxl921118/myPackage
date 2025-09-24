@@ -5,6 +5,8 @@ namespace Lxl921118\MyPackage\Services\OpenAI;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Client\Response;
+use Lxl921118\MyPackage\DTOs\OpenAI\ResponseAPIRequestDTO;
+use Lxl921118\MyPackage\DTOs\OpenAI\ResponseAPIResponseDTO;
 
 class OpenAIService
 {
@@ -52,30 +54,34 @@ class OpenAIService
     /**
      * 發送 API 請求
      * @param string $endpoint 端點
-     * @param array $payload 請求負載
+     * @param ResponseAPIRequestDTO $requestDTO 請求資料物件
      * @return Response
      */
-    public function request(string $endpoint, array $payload): Response
+    public function request(string $endpoint, ResponseAPIRequestDTO $requestDTO): Response
     {
+        // 將 DTO 轉換為陣列，過濾掉 null 值
+        $payload = array_filter(get_object_vars($requestDTO), fn($value) => $value !== null);
         return $this->client()->post($endpoint, $payload);
     }
 
     /**
      * Chat Completions API
-     * @param array $options 選項
-     * @return object 回應物件
+     * @param ResponseAPIRequestDTO $requestDTO 請求資料物件
+     * @return ResponseAPIResponseDTO 回應物件
      */
-    public function chat(array $input, array $options = []): object
+    public function chat(ResponseAPIRequestDTO $requestDTO): ResponseAPIResponseDTO
     {
-        $payload = array_merge([
-            'model' => config('openai.default_model', 'gpt-4o'),
-            'input' => $input,
-        ], $options);
+        // 如果沒有指定模型，使用預設值創建新的 DTO
+        if (empty($requestDTO->model)) {
+            $requestDTO = $requestDTO->with([
+                'model' => config('openai.default_model', 'gpt-5')
+            ]);
+        }
 
-        $response = $this->request('/responses', $payload);
+        $response = $this->request('/responses', $requestDTO);
 
         if ($response->successful()) {
-            return (object) $response->json();
+            return new ResponseAPIResponseDTO($response->json());
         }
 
         throw new \Exception('OpenAI Responses API 請求失敗: ' . $response->body());
@@ -97,11 +103,11 @@ class OpenAIResponses
 
     /**
      * 創建 Chat Completion
-     * @param array $options 選項
-     * @return object 回應物件
+     * @param ResponseAPIRequestDTO $requestDTO 請求資料物件
+     * @return ResponseAPIResponseDTO 回應物件
      */
-    public function create(array $input, array $options = []): object
+    public function create(ResponseAPIRequestDTO $requestDTO): ResponseAPIResponseDTO
     {
-        return $this->service->chat($input,$options);
+        return $this->service->chat($requestDTO);
     }
 }
